@@ -59,6 +59,12 @@
     width: 286px;
 }
 
+.wk-login-content-form input:focus {
+    border-color: #1890ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
 .wk-login-content-form-buttons {
     display: flex;
     align-items: center;

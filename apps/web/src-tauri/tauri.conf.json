@@ -7,7 +7,7 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "tangsengdaodao",
+    "productName": "openim",
     "version": "../package.json"
   },
   "tauri": {
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 800,
         "resizable": true,
-        "title": "唐僧叨叨",
+        "title": "OpenIM",
         "width": 1200
       }
     ],

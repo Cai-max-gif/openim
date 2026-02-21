@@ -3,8 +3,8 @@
     <title>address book_01</title>
     <defs>
         <linearGradient x1="96.2278107%" y1="100%" x2="3.77218935%" y2="0%" id="linearGradient-1">
-            <stop stop-color="#FF5A33" offset="0%"></stop>
-            <stop stop-color="#FFA98C" offset="100%"></stop>
+            <stop stop-color="#1890ff" offset="0%"></stop>
+            <stop stop-color="#69b1ff" offset="100%"></stop>
         </linearGradient>
     </defs>
     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

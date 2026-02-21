@@ -31,40 +31,84 @@ class Login extends Component<any, LoginState> {
                         <div className="wk-login-content-logo">
                             <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="logo" />
                         </div>
-                        <div className="wk-login-content-slogan">
-                            更愉快的与朋友交流
-                        </div>
+
                         <div className="wk-login-content-form">
-                            <input type="text" placeholder="手机号" onChange={(v) => {
-                                vm.username = v.target.value
-                            }}></input>
-                            <input type="password" placeholder="密码" onChange={(v) => {
-                                vm.password = v.target.value
-                            }}></input>
-                            <div className="wk-login-content-form-buttons">
-                                <Button loading={vm.loginLoading} className="wk-login-content-form-ok" type='primary' theme='solid' onClick={async () => {
-                                    if (!vm.username) {
-                                        Toast.error("手机号不能为空！")
-                                        return
-                                    }
-                                    if (!vm.password) {
-                                        Toast.error("密码不能为空！")
-                                        return
-                                    }
-                                    let fullPhone = vm.username
-                                    if (vm.username.length == 11 && vm.username.substring(0,1) === "1") {
-                                        fullPhone = `0086${vm.username}`
-                                    }else {
-                                        if(vm.username.startsWith("+") ) {
-                                            fullPhone = `00${vm.username.substring(1)}`
-                                        }else if(!vm.username.startsWith("00")) {
-                                            fullPhone = `00${vm.username}`
+                            <input 
+                                type="text" 
+                                placeholder="手机号" 
+                                onChange={(v) => {
+                                    // 只允许输入数字
+                                    let value = v.target.value.replace(/[^0-9]/g, '');
+                                    // 重置错误状态
+                                    vm.resetLoginError();
+                                    vm.username = value;
+                                }}
+                                onBlur={(v) => {
+                                    const phone = v.target.value;
+                                    if (phone) {
+                                        // 验证手机号格式：11位数字，第一位为1，第二位不能为0、1、2
+                                        const phoneRegex = /^1[3-9]\d{9}$/;
+                                        if (!phoneRegex.test(phone)) {
+                                            Toast.error("请输入正确的手机号格式！");
+                                            vm.loginError = true;
                                         }
                                     }
-                                    vm.requestLoginWithUsernameAndPwd(fullPhone, vm.password).catch((err) => {
-                                        Toast.error(err.msg)
-                                    })
-                                }}>登录</Button>
+                                }}
+                            ></input>
+                            <input 
+                                type="password" 
+                                placeholder="密码" 
+                                onChange={(v) => {
+                                    vm.password = v.target.value;
+                                    // 重置错误状态
+                                    vm.resetLoginError();
+                                }}
+                            ></input>
+                            <div className="wk-login-content-form-buttons">
+                                <Button 
+                                    loading={vm.loginLoading} 
+                                    disabled={vm.loginError} 
+                                    className="wk-login-content-form-ok" 
+                                    type='primary' 
+                                    theme='solid' 
+                                    onClick={async () => {
+                                        if (!vm.username) {
+                                            Toast.error("手机号不能为空！");
+                                            vm.loginError = true;
+                                            return;
+                                        }
+                                        
+                                        // 验证手机号格式：11位数字，第一位为1，第二位不能为0、1、2
+                                        const phoneRegex = /^1[3-9]\d{9}$/;
+                                        if (!phoneRegex.test(vm.username)) {
+                                            Toast.error("请输入正确的手机号格式！");
+                                            vm.loginError = true;
+                                            return;
+                                        }
+                                        
+                                        if (!vm.password) {
+                                            Toast.error("密码不能为空！");
+                                            vm.loginError = true;
+                                            return;
+                                        }
+                                        
+                                        let fullPhone = vm.username;
+                                        if (vm.username.length == 11 && vm.username.substring(0,1) === "1") {
+                                            fullPhone = `0086${vm.username}`;
+                                        } else {
+                                            if(vm.username.startsWith("+")) {
+                                                fullPhone = `00${vm.username.substring(1)}`;
+                                            } else if(!vm.username.startsWith("00")) {
+                                                fullPhone = `00${vm.username}`;
+                                            }
+                                        }
+                                        
+                                        vm.requestLoginWithUsernameAndPwd(fullPhone, vm.password).catch((err) => {
+                                            Toast.error(err.msg);
+                                            vm.loginError = true;
+                                        });
+                                    }}
+                                >登录</Button>
                             </div>
                             <div className="wk-login-content-form-others">
                                 <div className="wk-login-content-form-scanlogin" onClick={() => {
@@ -125,7 +169,7 @@ class Login extends Component<any, LoginState> {
 
                     {/* <div className="wk-login-footer">
                         <ul>
-                            <li>注册唐僧叨叨</li>
+                            <li>注册OpenIM</li>
                             <li>忘记密码</li>
                             <li>隐私政策</li>
                             <li>用户协议</li>

@@ -30,10 +30,17 @@ export class LoginVM extends ProviderListener {
 
     private _autoRefresh: boolean = true // 是否自动刷新二维码
      loginLoading: boolean = false // 登录中
+    loginError: boolean = false // 登录错误状态
 
     // ---------- 手机登录方式 ----------
     username?:string
     password?:string
+
+    // 重置错误状态
+    resetLoginError() {
+        this.loginError = false
+        this.notifyListener()
+    }
 
     set autoRefresh(v: boolean) {
         this._autoRefresh = v
